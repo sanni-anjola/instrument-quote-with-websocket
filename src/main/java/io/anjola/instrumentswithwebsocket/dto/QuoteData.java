@@ -1,20 +1,20 @@
 package io.anjola.instrumentswithwebsocket.dto;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class QuoteData {
     private String isin;
     private BigDecimal price;
-    private final Instant datetime;
+    private final LocalDateTime datetime;
 
     public QuoteData(String isin, BigDecimal price) {
         this.isin = isin;
         this.price = price;
-        this.datetime = Instant.now();
+        this.datetime = LocalDateTime.now();
     }
 
-    public Instant getDatetime() {
+    public LocalDateTime getDatetime() {
         return datetime;
     }
 

@@ -11,8 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,18 +35,16 @@ public class InstrumentService {
     }
 
     public List<InstrumentQuote> getInstruments(){
-        return map.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(map.values());
     }
 
-    public Quote saveQuote(Quote quote) {
+    public void saveQuote(Quote quote) {
 
         String isin = quote.getData().getIsin();
         if(map.containsKey(isin)) {
             PriceTime priceTime = new PriceTime(quote.getData().getPrice(), quote.getData().getDatetime());
             map.get(isin).getPriceTimeList().add(priceTime);
-            return quote;
         }
-        return null;
     }
 
     public List<CandleStick> getCandleSticks(String isin){
@@ -56,20 +55,15 @@ public class InstrumentService {
         List<PriceTime> priceTimes = instrumentQuote.getPriceTimeList();
         if(priceTimes.isEmpty()) return new ArrayList<>();
         logger.info("{}", priceTimes);
-        Instant start = Instant.now().truncatedTo(ChronoUnit.MINUTES).minus(LAST_NO_OF_MINUTES_NEEDED, ChronoUnit.MINUTES);
-        Instant end = start.plus(LAST_NO_OF_MINUTES_NEEDED, ChronoUnit.MINUTES);
-        List<Instant> times = new ArrayList<>();
+        LocalDateTime start = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).minus(LAST_NO_OF_MINUTES_NEEDED, ChronoUnit.MINUTES);
+        LocalDateTime end = start.plus(LAST_NO_OF_MINUTES_NEEDED, ChronoUnit.MINUTES);
+        List<LocalDateTime> times = new ArrayList<>();
 
         while (start.isBefore(end)){
             times.add(start);
             start = start.plus(1, ChronoUnit.MINUTES);
         }
 
-//        List<List<PriceTime>> collect = times.stream()
-//                .map(t -> priceTimes.stream()
-//                        .filter(pt -> pt.getDatetime().isBefore(t))
-//                        .collect(Collectors.toList()))
-//                .collect(Collectors.toList());
         List<CandleStick> candleSticks = times.stream()
                 .map(t -> priceTimes.stream()
                         .filter(pt -> pt.getDatetime().isAfter(t) && pt.getDatetime().isBefore(t.plusSeconds(60)))
@@ -114,13 +108,12 @@ public class InstrumentService {
                 .map(PriceTime::getPrice)
                 .min(BigDecimal::compareTo).orElse(null);
 
-        Instant open = priceTimes.stream()
+        LocalDateTime open = priceTimes.stream()
                 .parallel()
                 .map(PriceTime::getDatetime)
-                .min(Instant::compareTo)
+                .min(LocalDateTime::compareTo)
                 .orElse(null);
 
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         CandleStick candleStick = new CandleStick();
         candleStick.setHighPrice(max);
         candleStick.setLowPrice(min);

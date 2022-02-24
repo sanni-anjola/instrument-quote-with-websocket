@@ -1,13 +1,13 @@
 package io.anjola.instrumentswithwebsocket.dto;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class PriceTime {
     private BigDecimal price;
-    private Instant datetime;
+    private LocalDateTime datetime;
 
-    public PriceTime(BigDecimal price, Instant datetime) {
+    public PriceTime(BigDecimal price, LocalDateTime datetime) {
         this.price = price;
         this.datetime = datetime;
     }
@@ -20,11 +20,11 @@ public class PriceTime {
         this.price = price;
     }
 
-    public Instant getDatetime() {
+    public LocalDateTime getDatetime() {
         return datetime;
     }
 
-    public void setDatetime(Instant datetime) {
+    public void setDatetime(LocalDateTime datetime) {
         this.datetime = datetime;
     }
 

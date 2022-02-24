@@ -1,4 +1,4 @@
-import java.time.Instant
+import java.time.LocalDateTime
 
 data class InstrumentEvent(val type: Type, val data: Instrument) {
   enum class Type {
@@ -21,8 +21,8 @@ interface CandlestickManager {
 }
 
 data class Candlestick(
-val openTimestamp: Instant,
-var closeTimestamp: Instant,
+val openTimestamp: LocalDateTime,
+var closeTimestamp: LocalDateTime,
 val openPrice: Price,
 var highPrice: Price,
 var lowPrice: Price,

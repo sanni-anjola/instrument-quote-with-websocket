@@ -1,17 +1,33 @@
 package io.anjola.instrumentswithwebsocket.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.anjola.instrumentswithwebsocket.config.PriceConfig;
+
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class CandleStick {
-    private Instant openTimeStamp;
-    private Instant closeTimeStamp;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime openTimeStamp;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime closeTimeStamp;
+
+    @JsonSerialize(using = PriceConfig.class)
     private BigDecimal highPrice;
+
+    @JsonSerialize(using = PriceConfig.class)
     private BigDecimal lowPrice;
+
+    @JsonSerialize(using = PriceConfig.class)
     private BigDecimal openPrice;
+
+    @JsonSerialize(using = PriceConfig.class)
     private BigDecimal closePrice;
 
-    public CandleStick(Instant openTimeStamp, Instant closeTimeStamp, BigDecimal highPrice, BigDecimal lowPrice, BigDecimal openPrice, BigDecimal closePrice) {
+    public CandleStick(LocalDateTime openTimeStamp, LocalDateTime closeTimeStamp, BigDecimal highPrice, BigDecimal lowPrice, BigDecimal openPrice, BigDecimal closePrice) {
         this.openTimeStamp = openTimeStamp;
         this.closeTimeStamp = closeTimeStamp;
         this.highPrice = highPrice;
@@ -23,19 +39,19 @@ public class CandleStick {
     public CandleStick() {
     }
 
-    public Instant getOpenTimeStamp() {
+    public LocalDateTime getOpenTimeStamp() {
         return openTimeStamp;
     }
 
-    public void setOpenTimeStamp(Instant openTimeStamp) {
+    public void setOpenTimeStamp(LocalDateTime openTimeStamp) {
         this.openTimeStamp = openTimeStamp;
     }
 
-    public Instant getCloseTimeStamp() {
+    public LocalDateTime getCloseTimeStamp() {
         return closeTimeStamp;
     }
 
-    public void setCloseTimeStamp(Instant closeTimeStamp) {
+    public void setCloseTimeStamp(LocalDateTime closeTimeStamp) {
         this.closeTimeStamp = closeTimeStamp;
     }
 

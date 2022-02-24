@@ -3,6 +3,7 @@ package io.anjola.instrumentswithwebsocket.service;
 import io.anjola.instrumentswithwebsocket.dto.CandleStick;
 import io.anjola.instrumentswithwebsocket.dto.PriceTime;
 import io.anjola.instrumentswithwebsocket.enums.OperationType;
+import io.anjola.instrumentswithwebsocket.exception.NotFoundException;
 import io.anjola.instrumentswithwebsocket.model.Instrument;
 import io.anjola.instrumentswithwebsocket.model.InstrumentQuote;
 import io.anjola.instrumentswithwebsocket.model.Quote;
@@ -51,7 +52,7 @@ public class InstrumentService {
         logger.info("{}", map.values().stream().filter(t -> t.getPriceTimeList().size() > 3).collect(Collectors.toList()));
         final int LAST_NO_OF_MINUTES_NEEDED = 30;
         InstrumentQuote instrumentQuote = map.get(isin);
-        if(instrumentQuote == null) return new ArrayList<>();
+        if(instrumentQuote == null) throw new NotFoundException("Instrument with ISIN "+ isin + " not found");
         List<PriceTime> priceTimes = instrumentQuote.getPriceTimeList();
         if(priceTimes.isEmpty()) return new ArrayList<>();
         logger.info("{}", priceTimes);
